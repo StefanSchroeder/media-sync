@@ -1,10 +1,10 @@
-<?
+<?php
 
 /**
  * Plugin Name: Media Sync
  * Plugin URI: https://wordpress.org/plugins/media-sync/
  * Description: Simple plugin to scan uploads directory and bring files to Media Library
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Erol Živina
  * Author URI: https://github.com/erolsk8
  * License: GPLv2+
@@ -142,3 +142,4 @@ function author_filter($query) {
     }
 }
 add_action('pre_get_posts','author_filter');
+?>
