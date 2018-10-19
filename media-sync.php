@@ -103,43 +103,4 @@ function media_sync_import_files() {
 function media_sync_main_page() {
     MediaSync::media_sync_main_page();
 }
-
-
-
-
-
-/**
- * Add filter in Media Library
- *
- * @since 0.1.0
- * @return void
- */
-function media_sync_missing_media_library_filter()
-{
-    // Skip if it's not Media Library
-    $scr = get_current_screen();
-    if ( $scr->base !== 'upload' ) return;
-
-
-    $missing = filter_input(INPUT_GET, 'missing', FILTER_SANITIZE_STRING);
-    $selected = (int)$missing > 0 ? $missing : '-1';
-
-    wp_dropdown_users([
-        'show_option_none' => 'All media items',
-        'name' => 'missing',
-        'selected' => $selected
-    ]);
-}
-add_action('restrict_manage_posts', 'media_sync_missing_media_library_filter');
-
-
-
-function author_filter($query) {
-    if ( is_admin() && $query->is_main_query() ) {
-        if (isset($_GET['author']) && $_GET['author'] == -1) {
-            $query->set('author', '');
-        }
-    }
-}
-add_action('pre_get_posts','author_filter');
 ?>
