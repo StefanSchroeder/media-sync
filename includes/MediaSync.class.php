@@ -3,7 +3,7 @@
 /**
  * Media Sync
  *
- * This class is used for generating main plugin content and also to import files to database
+ * This class is used for generating main content and also to import files to database
  *
  * @package     MediaSync
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -116,7 +116,9 @@ class MediaSync
                                 <span class="spinner is-active table-spinner"></span>
                             </div>
                         <? else : ?>
-                            <?= '<p class="media-sync-no-results">' . __('No Results', 'media-sync') . '</p>' ?>
+                            <p class="media-sync-no-results">
+                                <?= __('Everything seems fine here, there are no files that are not already in your Media Library.', 'media-sync') ?>
+                            </p>
                         <? endif; ?>
                     <? endif; ?>
                 </form>
@@ -152,7 +154,6 @@ class MediaSync
         <?
     }
 
-
     /**
      * Render table row for each file or directory
      *
@@ -165,8 +166,7 @@ class MediaSync
         $has_file_id = isset($item['file_id']) && $item['file_id'] !== false;
         $url = $has_file_id ? esc_url(add_query_arg(['post' => $item['file_id'], 'action' => 'edit'], get_admin_url(null, 'post.php'))) : $item['url'];
         $url_attr = $item['is_dir'] !== true ? ' target="_blank"' : '';
-        $children = count($item['children']);
-        $num_items = sprintf('(%u %s)', $children, $children == 1 ? __('item', 'media-sync') : __('items', 'media-sync'));
+        $count_children = count($item['children']);
         $cls = 'media-sync-list-file';
         $cls .= ' is-' . ($item['is_dir'] === true ? 'dir' : 'file');
         $cls .= ' level-' . $item['level'];
@@ -174,15 +174,15 @@ class MediaSync
         if ($item['is_dir'] !== true) {
             $cls .= ' is-in-db-' . ($has_file_id ? 'yes' : 'no');
         } else {
-            $cls .= ' is-empty-' . ($children <= 0 ? 'yes' : 'no');
+            $cls .= ' is-empty-' . ($count_children <= 0 ? 'yes' : 'no');
         }
 
-        $toggle_arrows = true; // This can be made optional later
+        $toggle_arrows = true; // This can be made optional
         if ($toggle_arrows) {
             $is_link = $item['is_dir'] !== true;
             $cls .= ' toggle-arrows-yes';
         } else {
-            $is_link = $item['is_dir'] !== true || $children > 0;
+            $is_link = $item['is_dir'] !== true || $count_children > 0;
             $url_attr .= ' class="js-toggle-row"';
         }
 
@@ -219,17 +219,14 @@ class MediaSync
                     <span class="dashicons dashicons-category"></span>
                 <? elseif(isset($item['src']) && file_exists($item['absolute_path'])) : ?>
                     <span class="media-sync-image media-icon image-icon">
-                        <img width="60" height="60" class="attachment-60x60 size-60x60" alt=""
-                             src="<?= $item['src'] ?>"
-                             srcset="<?= $item['src'] ?> 100w, <?= $item['src'] ?> 150w"
-                             sizes="100vw" />
+                        <img width="60" height="60" class="attachment-60x60 size-60x60" alt="" src="<?= $item['src'] ?>" srcset="<?= $item['src'] ?> 100w, <?= $item['src'] ?> 150w" sizes="100vw" />
                     </span>
                 <? endif; ?>
                 <span class="media-sync-file-name"><?= $item['name'] ?></span>
                 <?= $is_link ? '</a>' : '' ?>
 
                 <? if ($item['is_dir'] === true) : ?>
-                    <span class="media-sync-num-items"><?= $num_items ?></span>
+                    <span class="media-sync-num-items"><?= sprintf('(%u %s)', $count_children, $count_children == 1 ? __('item', 'media-sync') : __('items', 'media-sync')) ?></span>
                 <? endif; ?>
 
                 <? if ($has_file_id) : ?>
@@ -436,6 +433,7 @@ class MediaSync
     /**
      * Get list of files that are already in database
      *
+     * Caching does not seem to work
      *
      * @since 0.1.0
      * @param $cache bool Could be used to skip cache and get new values (only for first import batch for example)
@@ -443,9 +441,6 @@ class MediaSync
      */
     static private function media_sync_get_files_in_db($cache = true)
     {
-
-        // todo: Caching does not seem to work
-
         $files_in_db = wp_cache_get('media_sync_get_files_in_db', '', true);
 
         if ($files_in_db === false || $cache === false) {
