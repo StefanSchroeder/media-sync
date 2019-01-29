@@ -63,17 +63,14 @@ class MediaSync
 
                                 <span class="media-sync-dry-run-holder">
                                     <input type="checkbox" id="dry-run" name="dry_run" checked="checked" />
-                                    <label for="dry-run"><?= __('Dry Run (to test without making database changes)', 'media-sync') ?></label>
+                                    <label for="dry-run"><?= __('Dry Run (test without making database changes)', 'media-sync') ?></label>
                                 </span>
                             <? endif; ?>
                         </p>
                         <? if (!$scan_files) : ?>
                             <p class="media-sync-scan-files-message">
-                                <?= sprintf(__('It might take some time to scan all files if there are too many in upload dir: %s', 'media-sync'),
+                                <?= sprintf(__('Click "Scan Files" to see content of upload dir: %s', 'media-sync'),
                                     '<code title="'.$upload_dir['basedir'].'">'.$uploads_dir.'</code>') ?>
-                            </p>
-                            <p class="media-sync-scan-files-message">
-                                <?= sprintf(__('If you get timeout error, you can try to increase %s in php.ini', 'media-sync'), '<code>max_execution_time</code>') ?>
                             </p>
                         <? endif; ?>
                     </div>
@@ -97,7 +94,7 @@ class MediaSync
                                 </span>
                             </span>
                             <span class="media-sync-state media-sync-state-note">
-                                <?= __('Those that are already in Media Library are skipped', 'media-sync') ?>
+                                <?= __('Files already in Media Library will be skipped during import', 'media-sync') ?>
                             </span>
                         </p>
 
@@ -214,15 +211,13 @@ class MediaSync
                     <span class="js-toggle-row media-sync-toggle-row dashicons"></span>
                 <? endif; ?>
 
-                <?= $is_link ? '<a href="'.$url.'"'.$url_attr.'>' : '' ?>
+                <?= $is_link ? '<a href="' . $url . '"' . $url_attr . '>' : '' ?>
                 <? if ($item['is_dir'] === true) : ?>
                     <span class="dashicons dashicons-category"></span>
-                <? elseif(isset($item['src']) && file_exists($item['absolute_path'])) : ?>
-                    <span class="media-sync-image media-icon image-icon">
-                        <img width="60" height="60" class="attachment-60x60 size-60x60" alt="" src="<?= $item['src'] ?>" srcset="<?= $item['src'] ?> 100w, <?= $item['src'] ?> 150w" sizes="100vw" />
-                    </span>
                 <? endif; ?>
-                <span class="media-sync-file-name"><?= $item['name'] ?></span>
+                <span class="media-sync-file-name">
+                    <?= $item['name'] ?>
+                </span>
                 <?= $is_link ? '</a>' : '' ?>
 
                 <? if ($item['is_dir'] === true) : ?>

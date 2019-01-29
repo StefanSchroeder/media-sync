@@ -3,9 +3,9 @@ Contributors: erolsk8
 Donate link: https://www.paypal.me/erolsk8
 Tags: media, sync, import, uploads, database
 Requires at least: 3.0.1
-Tested up to: 4.9.8
+Tested up to: 5.0.1
 Requires PHP: 5.2.4
-Stable tag: 1.0
+Stable tag: 0.1.2
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,12 +36,19 @@ I once copied WordPress site to a different server and Media Library ended up be
 
 == Changelog ==
 
-= 1.0 =
+= 0.1.2 =
+* Fix sorting of directories and files
+* Minor wording changes and code cleanup
+
+= 0.1.1 =
+* Fix error on activation
+
+= 0.1.0 =
 * Initial plugin features
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 0.1.0 =
 Initial plugin features
 
-
+svn co https://plugins.svn.wordpress.org/media-sync media-sync-svn
