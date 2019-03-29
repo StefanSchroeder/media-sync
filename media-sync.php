@@ -103,4 +103,3 @@ function media_sync_import_files() {
 function media_sync_main_page() {
     MediaSync::media_sync_main_page();
 }
-?>

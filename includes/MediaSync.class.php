@@ -38,7 +38,7 @@ class MediaSync
         <div class="wrap main-media-sync-page" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
             <h1><?= __('Media Sync', 'media-sync') ?></h1>
 
-            <? if ($scan_files) : ?>
+            <?php if ($scan_files) : ?>
                 <div class="notice notice-error">
                     <p><?= __('Please backup your database! This plugin makes database changes.', 'media-sync') ?></p>
                 </div>
@@ -46,18 +46,18 @@ class MediaSync
                     <p><?= sprintf(__('Done! Highlighted files were successfully imported. %s to see changes.', 'media-sync'),
                             '<a href="'.add_query_arg('scan_files', 1, $here).'">'.__('Re-scan').'</a>') ?></p>
                 </div>
-            <? endif; ?>
+            <?php endif; ?>
 
             <div class="media-sync-list-files">
                 <form action="<?= $here ?>" method="POST">
                     <input type="hidden" name="page" value="media-sync-page"/>
                     <div class="media-sync-buttons-holder">
                         <p class="media-sync-button-holder">
-                            <? if (!$scan_files) : ?>
+                            <?php if (!$scan_files) : ?>
                                 <a class="button button-primary"
                                    href="<?= add_query_arg('scan_files', 1, $here) ?>"><?= __('Scan Files', 'media-sync') ?></a>
-                            <? endif; ?>
-                            <? if ($scan_files) : ?>
+                            <?php endif; ?>
+                            <?php if ($scan_files) : ?>
                                 <button class="button button-primary js-import-selected"><?= __('Import Selected', 'media-sync') ?></button>
                                 <span class="spinner import-spinner"></span>
 
@@ -65,17 +65,17 @@ class MediaSync
                                     <input type="checkbox" id="dry-run" name="dry_run" checked="checked" />
                                     <label for="dry-run"><?= __('Dry Run (test without making database changes)', 'media-sync') ?></label>
                                 </span>
-                            <? endif; ?>
+                            <?php endif; ?>
                         </p>
-                        <? if (!$scan_files) : ?>
+                        <?php if (!$scan_files) : ?>
                             <p class="media-sync-scan-files-message">
                                 <?= sprintf(__('Click "Scan Files" to see content of upload dir: %s', 'media-sync'),
                                     '<code title="'.$upload_dir['basedir'].'">'.$uploads_dir.'</code>') ?>
                             </p>
-                        <? endif; ?>
+                        <?php endif; ?>
                     </div>
 
-                    <? if ($scan_files) : ?>
+                    <?php if ($scan_files) : ?>
                         <p class="media-sync-state-holder">
                             <span class="media-sync-progress-holder">
                                 <span class="media-sync-progress"></span>
@@ -98,26 +98,26 @@ class MediaSync
                             </span>
                         </p>
 
-                        <? $tree = self::media_sync_get_list_of_uploads(); ?>
-                        <? if (!empty($tree)) : ?>
+                        <?php $tree = self::media_sync_get_list_of_uploads(); ?>
+                        <?php if (!empty($tree)) : ?>
                             <div class="media-sync-table-holder">
                                 <table class="wp-list-table widefat fixed media">
-                                    <? self::media_sync_render_thead_tfoot_row('thead') ?>
+                                    <?php self::media_sync_render_thead_tfoot_row('thead') ?>
                                     <tbody id="the-list">
-                                    <? foreach ($tree as $item) : ?>
-                                        <? self::media_sync_render_row($item) ?>
-                                    <? endforeach; ?>
+                                    <?php foreach ($tree as $item) : ?>
+                                        <?php self::media_sync_render_row($item) ?>
+                                    <?php endforeach; ?>
                                     </tbody>
-                                    <? self::media_sync_render_thead_tfoot_row('tfoot') ?>
+                                    <?php self::media_sync_render_thead_tfoot_row('tfoot') ?>
                                 </table>
                                 <span class="spinner is-active table-spinner"></span>
                             </div>
-                        <? else : ?>
+                        <?php else : ?>
                             <p class="media-sync-no-results">
                                 <?= __('Everything seems fine here, there are no files that are not already in your Media Library.', 'media-sync') ?>
                             </p>
-                        <? endif; ?>
-                    <? endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </form>
             </div>
         </div>
@@ -148,7 +148,7 @@ class MediaSync
                 </th>
             </tr>
         </<?= $tag ?>>
-        <?
+        <?php
     }
 
     /**
@@ -193,41 +193,41 @@ class MediaSync
                        value="<?= $item['absolute_path'] ?>" data-row-id="<?= $row_id ?>">
             </th>
             <td class="title column-title has-row-actions column-primary" data-colname="<?= __('File', 'media-sync') ?>">
-                <? if (!empty($item['parents'])) : ?>
+                <?php if (!empty($item['parents'])) : ?>
                     <span class="media-sync-parents">
-                        <? foreach ($item['parents'] as $parent_key => $parent) : ?>
-                            <?
+                        <?php foreach ($item['parents'] as $parent_key => $parent) : ?>
+                            <?php
                             $parent_cls = 'media-sync-parent';
                             $parent_cls .= ' is-first-' . ($parent_key == 0 ? 'yes' : 'no');
                             $parent_cls .= ' is-last-' . ($parent_key + 1 == count($item['parents']) ? 'yes' : 'no');
                             ?>
                             <span class="<?= $parent_cls ?>"><i></i></span>
-                        <? endforeach; ?>
+                        <?php endforeach; ?>
                         <span class="clearfix"></span>
                     </span>
-                <? endif; ?>
+                <?php endif; ?>
 
-                <? if ($toggle_arrows && $item['is_dir'] === true) : ?>
+                <?php if ($toggle_arrows && $item['is_dir'] === true) : ?>
                     <span class="js-toggle-row media-sync-toggle-row dashicons"></span>
-                <? endif; ?>
+                <?php endif; ?>
 
                 <?= $is_link ? '<a href="' . $url . '"' . $url_attr . '>' : '' ?>
-                <? if ($item['is_dir'] === true) : ?>
+                <?php if ($item['is_dir'] === true) : ?>
                     <span class="dashicons dashicons-category"></span>
-                <? endif; ?>
+                <?php endif; ?>
                 <span class="media-sync-file-name">
                     <?= $item['name'] ?>
                 </span>
                 <?= $is_link ? '</a>' : '' ?>
 
-                <? if ($item['is_dir'] === true) : ?>
+                <?php if ($item['is_dir'] === true) : ?>
                     <span class="media-sync-num-items"><?= sprintf('(%u %s)', $count_children, $count_children == 1 ? __('item', 'media-sync') : __('items', 'media-sync')) ?></span>
-                <? endif; ?>
+                <?php endif; ?>
 
-                <? if ($has_file_id) : ?>
+                <?php if ($has_file_id) : ?>
                     <span class="media-sync-already-in-db"> - <?= __('Already in', 'media-sync') ?> <a
                             href="<?= $url ?>" class="dashicons dashicons-admin-media" target="_blank"></a></span>
-                <? endif; ?>
+                <?php endif; ?>
             </td>
         </tr>
 

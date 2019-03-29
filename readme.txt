@@ -3,7 +3,7 @@ Contributors: erolsk8
 Donate link: https://www.paypal.me/erolsk8
 Tags: media, sync, import, uploads, database
 Requires at least: 3.0.1
-Tested up to: 5.0.3
+Tested up to: 5.1.1
 Requires PHP: 5.2.4
 Stable tag: 0.1.3
 License: GPLv2+
@@ -18,6 +18,12 @@ You can scan all files that are in "uploads" directory and see which ones are ac
 You can also use FTP to upload your files to "uploads" directory and use this plugin to bring those files into Media Library. There are other plugins that can be used for that, but with this one you can easily select all and import all at once.
 
 This plugin is still in early development so it has basic functionality, but more features will be added if there is some interest for that.
+
+Files that are ignored:
+- index.php,
+- various hidden files,
+- WP generated thumbnails - anything ending with for example -100x100.jpg.
+
 
 = Why I created this plugin =
 I once copied WordPress site to a different server and Media Library ended up being empty, even tho all files were in "uploads" directory and database was copied. So I had to use some other plugin which required me to manually enter each directory and import files in batches per each director. But I needed something to just import everything at once, so I created this plugin.
