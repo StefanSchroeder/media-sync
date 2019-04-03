@@ -4,13 +4,13 @@
  * Plugin Name: Media Sync
  * Plugin URI: https://wordpress.org/plugins/media-sync/
  * Description: Simple plugin to scan uploads directory and bring files to Media Library
- * Version: 0.1.3
+ * Version: 0.1.4
  * Author: Erol Živina
  * Author URI: https://github.com/erolsk8
  * License: GPLv2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: media-sync
- * Domain Path:
+ * Domain Path: /languages
  *
  */
 
@@ -28,7 +28,8 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'media_sync_link
  * @since 0.1.0
  */
 function media_sync_link_to_main_plugin_page( $links ) {
-    $links[] = '<a href="'. esc_url( get_admin_url(null, 'upload.php?page=media-sync-page') ) .'">Media Sync</a>';
+    $title = __('Media Sync', 'media-sync');
+    $links[] = '<a href="'. esc_url( get_admin_url(null, 'upload.php?page=media-sync-page') ) .'">' . $title . '</a>';
     return $links;
 }
 
@@ -42,8 +43,9 @@ add_action( 'admin_menu', 'media_sync_add_menu_items' );
  * @since 0.1.0
  */
 function media_sync_add_menu_items() {
+    $title = __('Media Sync', 'media-sync');
     // Add sub item to Media menu
-    add_media_page( 'Media Sync', 'Media Sync', 'activate_plugins', 'media-sync-page', 'media_sync_main_page' );
+    add_media_page( $title, $title, 'activate_plugins', 'media-sync-page', 'media_sync_main_page' );
 }
 
 
@@ -90,6 +92,20 @@ add_action( 'wp_ajax_media_sync_import_files', 'media_sync_import_files' );
  */
 function media_sync_import_files() {
     MediaSync::media_sync_import_files();
+}
+
+
+
+add_action( 'plugins_loaded', 'media_sync_load_plugin_textdomain' );
+
+/**
+ * Loads plugin translated strings
+ *
+ * @since 0.1.4
+ * @return void
+ */
+function media_sync_load_plugin_textdomain() {
+    load_plugin_textdomain( 'media-sync', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 

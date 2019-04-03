@@ -24,7 +24,7 @@ class MediaSync
     {
 
         if (!current_user_can('update_plugins')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'media-sync'));
         }
 
         $scan_files = isset($_GET['scan_files']) && $_GET['scan_files'] == true;
@@ -44,7 +44,7 @@ class MediaSync
                 </div>
                 <div class="notice notice-success notice-files-imported">
                     <p><?= sprintf(__('Done! Highlighted files were successfully imported. %s to see changes.', 'media-sync'),
-                            '<a href="'.add_query_arg('scan_files', 1, $here).'">'.__('Re-scan').'</a>') ?></p>
+                            '<a href="'.add_query_arg('scan_files', 1, $here).'">'.__('Re-scan', 'media-sync').'</a>') ?></p>
                 </div>
             <?php endif; ?>
 
@@ -249,7 +249,7 @@ class MediaSync
     static public function media_sync_import_files()
     {
         if (!current_user_can('update_plugins')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'media-sync'));
         }
 
         check_ajax_referer( 'media_sync_import_files', 'security' );

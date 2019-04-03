@@ -1,0 +1,98 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Media Sync\n"
+"POT-Creation-Date: 2019-04-03 01:36+0200\n"
+"PO-Revision-Date: 2019-04-03 01:09+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ../../../../../../Library/WebServer/Documents/stuff/"
+"media-sync-github/wp-content/plugins/media-sync\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/MediaSync.class.php:27 includes/MediaSync.class.php:252
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/MediaSync.class.php:39
+msgid "Media Sync"
+msgstr ""
+
+#: includes/MediaSync.class.php:43
+msgid "Please backup your database! This plugin makes database changes."
+msgstr ""
+
+#: includes/MediaSync.class.php:46
+#, php-format
+msgid "Done! Highlighted files were successfully imported. %s to see changes."
+msgstr ""
+
+#: includes/MediaSync.class.php:47
+msgid "Re-scan"
+msgstr ""
+
+#: includes/MediaSync.class.php:58
+msgid "Scan Files"
+msgstr ""
+
+#: includes/MediaSync.class.php:61
+msgid "Import Selected"
+msgstr ""
+
+#: includes/MediaSync.class.php:66
+msgid "Dry Run (test without making database changes)"
+msgstr ""
+
+#: includes/MediaSync.class.php:72
+#, php-format
+msgid "Click \"Scan Files\" to see content of upload dir: %s"
+msgstr ""
+
+#: includes/MediaSync.class.php:85
+msgid "Imported"
+msgstr ""
+
+#: includes/MediaSync.class.php:89
+msgid "out of"
+msgstr ""
+
+#: includes/MediaSync.class.php:93
+msgid "selected items"
+msgstr ""
+
+#: includes/MediaSync.class.php:97
+msgid "Files already in Media Library will be skipped during import"
+msgstr ""
+
+#: includes/MediaSync.class.php:117
+msgid ""
+"Everything seems fine here, there are no files that are not already in your "
+"Media Library."
+msgstr ""
+
+#: includes/MediaSync.class.php:143
+msgid "Select All"
+msgstr ""
+
+#: includes/MediaSync.class.php:147 includes/MediaSync.class.php:195
+msgid "File"
+msgstr ""
+
+#: includes/MediaSync.class.php:224
+msgid "item"
+msgstr ""
+
+#: includes/MediaSync.class.php:224
+msgid "items"
+msgstr ""
+
+#: includes/MediaSync.class.php:228
+msgid "Already in"
+msgstr ""

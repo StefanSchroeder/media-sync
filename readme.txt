@@ -5,7 +5,7 @@ Tags: media, sync, import, uploads, database
 Requires at least: 3.0.1
 Tested up to: 5.1.1
 Requires PHP: 5.2.4
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,14 +19,14 @@ You can also use FTP to upload your files to "uploads" directory and use this pl
 
 This plugin is still in early development so it has basic functionality, but more features will be added if there is some interest for that.
 
+= Why I created this plugin =
+I once copied WordPress site to a different server and Media Library ended up being empty, even tho all files were in "uploads" directory and database was copied. So I had to use some other plugin which required me to manually enter each directory and import files in batches per each director. But I needed something to just import everything at once, so I created this plugin.
+
 Files that are ignored:
 - index.php,
 - various hidden files,
 - WP generated thumbnails - anything ending with for example -100x100.jpg.
 
-
-= Why I created this plugin =
-I once copied WordPress site to a different server and Media Library ended up being empty, even tho all files were in "uploads" directory and database was copied. So I had to use some other plugin which required me to manually enter each directory and import files in batches per each director. But I needed something to just import everything at once, so I created this plugin.
 
 == Installation ==
 
@@ -41,6 +41,13 @@ I once copied WordPress site to a different server and Media Library ended up be
 4. Import completed
 
 == Changelog ==
+
+= 0.1.4 =
+* Add plugin localization
+* Add Serbian translation
+
+= 0.1.3 =
+* Various improvements and fixes
 
 = 0.1.2 =
 * Fix sorting of directories and files
