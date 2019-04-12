@@ -293,13 +293,22 @@ class MediaSync
                             // Check the type of file. We'll use this as the 'post_mime_type'.
                             $filetype = wp_check_filetype( basename( $absolute_path ), null );
 
+                            // Get the file date.
+                            $post_date = date( 'Y-m-d H:i:s', filemtime( $absolute_path ) );
+
+                            // If for whatever reason not found, use current date.
+                            if(!$post_date) {
+                                $post_date = date( 'Y-m-d H:i:s' );
+                            }
+
                             // Prepare an array of post data for the attachment.
                             $attachment = array(
                                 'guid'           => get_site_url() . $relative_path,
                                 'post_mime_type' => $filetype['type'],
                                 'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $relative_path ) ),
                                 'post_content'   => '',
-                                'post_status'    => 'inherit'
+                                'post_status'    => 'inherit',
+                                'post_date'      => $post_date
                             );
 
                             // Insert the attachment.
