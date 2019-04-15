@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Media Sync\n"
-"POT-Creation-Date: 2019-04-03 01:36+0200\n"
+"POT-Creation-Date: 2019-04-15 19:45+0200\n"
 "PO-Revision-Date: 2019-04-03 01:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,11 +17,11 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/MediaSync.class.php:27 includes/MediaSync.class.php:252
+#: includes/MediaSync.class.php:27 includes/MediaSync.class.php:256
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/MediaSync.class.php:39
+#: includes/MediaSync.class.php:39 media-sync.php:31 media-sync.php:46
 msgid "Media Sync"
 msgstr ""
 
@@ -81,18 +81,22 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: includes/MediaSync.class.php:147 includes/MediaSync.class.php:195
+#: includes/MediaSync.class.php:147 includes/MediaSync.class.php:197
 msgid "File"
 msgstr ""
 
-#: includes/MediaSync.class.php:224
+#: includes/MediaSync.class.php:226
 msgid "item"
 msgstr ""
 
-#: includes/MediaSync.class.php:224
+#: includes/MediaSync.class.php:226
 msgid "items"
 msgstr ""
 
-#: includes/MediaSync.class.php:228
+#: includes/MediaSync.class.php:230
 msgid "Already in"
+msgstr ""
+
+#: includes/MediaSync.class.php:232
+msgid "In Trash"
 msgstr ""

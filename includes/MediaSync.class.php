@@ -183,6 +183,8 @@ class MediaSync
             $url_attr .= ' class="js-toggle-row"';
         }
 
+        $is_trash = isset($item['file_status']) && $item['file_status'] === 'trash';
+
         $row_id = "media-sync-item-" . $item['alias'];
         ?>
 
@@ -225,8 +227,10 @@ class MediaSync
                 <?php endif; ?>
 
                 <?php if ($has_file_id) : ?>
-                    <span class="media-sync-already-in-db"> - <?= __('Already in', 'media-sync') ?> <a
-                            href="<?= $url ?>" class="dashicons dashicons-admin-media" target="_blank"></a></span>
+                    <span class="media-sync-already-in-db"> - <?= __('Already in', 'media-sync') ?>
+                        <a href="<?= $url ?>" class="dashicons dashicons-admin-media" target="_blank"></a>
+                        <?= $is_trash ? ' (' . __('In Trash', 'media-sync') . ')' : '' ?>
+                    </span>
                 <?php endif; ?>
             </td>
         </tr>
@@ -413,12 +417,13 @@ class MediaSync
             } else {
 
                 $relative_path = str_replace(get_home_path(), DIRECTORY_SEPARATOR, $full_path);
-                $file_id = isset($files_in_db[$relative_path]) && !empty($files_in_db[$relative_path]) &&
-                        !empty($files_in_db[$relative_path]['id']) ? $files_in_db[$relative_path]['id'] : false;
+                $file_in_db = isset($files_in_db[$relative_path]) && !empty($files_in_db[$relative_path]) ?
+                    $files_in_db[$relative_path] : false;
 
                 $item['relative_path'] = $relative_path;
                 $item['url'] = get_site_url() . $relative_path;
-                $item['file_id'] = $file_id;
+                $item['file_id'] = $file_in_db && !empty($file_in_db['id']) ? $file_in_db['id'] : false;
+                $item['file_status'] = $file_in_db && !empty($file_in_db['status']) ? $file_in_db['status'] : false;
             }
 
             // Add with this "key" for sorting
@@ -451,7 +456,7 @@ class MediaSync
 
             $media_query = new WP_Query([
                 'post_type' => 'attachment',
-                'post_status' => 'inherit',
+                'post_status' => ['inherit', 'trash'],
                 'posts_per_page' => -1
             ]);
 
@@ -459,7 +464,8 @@ class MediaSync
             foreach ($media_query->posts as $post) {
                 $files[str_replace(get_site_url(), "", wp_get_attachment_url($post->ID))] = [
                     'id' => $post->ID,
-                    'name' => $post->post_title
+                    'name' => $post->post_title,
+                    'status' => $post->post_status
                 ];
             }
 
