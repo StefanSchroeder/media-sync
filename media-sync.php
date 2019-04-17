@@ -4,7 +4,7 @@
  * Plugin Name: Media Sync
  * Plugin URI: https://wordpress.org/plugins/media-sync/
  * Description: Simple plugin to scan uploads directory and bring files to Media Library
- * Version: 0.1.5
+ * Version: 0.1.6
  * Author: Erol Živina
  * Author URI: https://github.com/erolsk8
  * License: GPLv2+
@@ -67,14 +67,14 @@ function media_sync_load_admin_scripts( $hook ) {
     $js_dir  = plugin_dir_url( __FILE__ ) . 'admin/js/';
     $css_dir = plugin_dir_url( __FILE__ ) . 'admin/css/';
 
-    wp_register_script( 'media-sync-js-admin-script', $js_dir . 'script.js', ['jquery'], false, true );
+    wp_register_script( 'media-sync-js-admin-script', $js_dir . 'script.js', array('jquery'), false, true );
     wp_enqueue_script( 'media-sync-js-admin-script' );
 
-    wp_enqueue_script( 'media-sync-js-admin-ajax-script', $js_dir . 'ajax_script.js', ['jquery'] );
-    wp_localize_script( 'media-sync-js-admin-ajax-script', 'ajax_data', [
+    wp_enqueue_script( 'media-sync-js-admin-ajax-script', $js_dir . 'ajax_script.js', array('jquery') );
+    wp_localize_script( 'media-sync-js-admin-ajax-script', 'ajax_data', array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
         'security' => wp_create_nonce( "media_sync_import_files" )
-    ]);
+    ));
 
     wp_register_style( 'media-sync-css-admin-style', $css_dir . 'style.css');
     wp_enqueue_style( 'media-sync-css-admin-style' );

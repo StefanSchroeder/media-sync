@@ -4,8 +4,8 @@ Donate link: https://www.paypal.me/erolsk8
 Tags: media, sync, import, uploads, database
 Requires at least: 3.0.1
 Tested up to: 5.1.1
-Requires PHP: 5.2.4
-Stable tag: 0.1.4
+Requires PHP: 5.4
+Stable tag: 0.1.6
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,13 @@ Files that are ignored:
 4. Import completed
 
 == Changelog ==
+
+= 0.1.6 =
+* Fix PHP short array syntax
+* Update required PHP version to 5.4
+
+= 0.1.5 =
+* Date of imported Media Library item is now set based on file modification timestamp
 
 = 0.1.4 =
 * Add plugin localization
