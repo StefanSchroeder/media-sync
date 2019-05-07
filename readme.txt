@@ -5,7 +5,7 @@ Tags: media, sync, import, uploads, database
 Requires at least: 3.0.1
 Tested up to: 5.1.1
 Requires PHP: 5.4
-Stable tag: 0.1.6
+Stable tag: 1.0.0
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ Files that are ignored:
 4. Import completed
 
 == Changelog ==
+
+= 1.0.0 =
+* New option to clean up Media Library from items that are missing actual files (using custom Media Library filter)
+* New filter when scanning uploads directory which can help to show only files missing from Media Library
 
 = 0.1.6 =
 * Fix PHP short array syntax

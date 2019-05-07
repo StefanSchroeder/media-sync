@@ -17,7 +17,7 @@
 
 
 .main-media-sync-page .media-sync-button-holder {
-    margin-bottom: 0;
+    margin: 20px 0;
 }
 
 .main-media-sync-page .media-sync-button-holder .import-spinner {
@@ -33,7 +33,7 @@
 
 .main-media-sync-page .media-sync-scan-files-message {
     display: block;
-    margin: 20px 0;
+    margin: 15px 0 25px;
 }
 
 /* Progress Bar */
@@ -71,6 +71,14 @@
     color: #aaa;
     padding: 10px 0 5px;
 }
+
+.main-media-sync-page .wp-filter {
+    margin-bottom: 10px;
+}
+.main-media-sync-page .wp-filter .filter-items {
+    padding: 11px 0;
+}
+
 
 /* Table Holder */
 .main-media-sync-page .media-sync-table-holder {

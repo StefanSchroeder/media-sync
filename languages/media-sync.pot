@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Media Sync\n"
-"POT-Creation-Date: 2019-04-15 19:45+0200\n"
+"POT-Creation-Date: 2019-05-07 17:44+0200\n"
 "PO-Revision-Date: 2019-04-03 01:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,86 +17,137 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/MediaSync.class.php:27 includes/MediaSync.class.php:256
+#: includes/MediaSync.class.php:27 includes/MediaSync.class.php:294
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/MediaSync.class.php:39 media-sync.php:31 media-sync.php:46
+#: includes/MediaSync.class.php:41 media-sync.php:31 media-sync.php:46
 msgid "Media Sync"
 msgstr ""
 
-#: includes/MediaSync.class.php:43
+#: includes/MediaSync.class.php:45
 msgid "Please backup your database! This plugin makes database changes."
 msgstr ""
 
-#: includes/MediaSync.class.php:46
+#: includes/MediaSync.class.php:48
 #, php-format
 msgid "Done! Highlighted files were successfully imported. %s to see changes."
 msgstr ""
 
-#: includes/MediaSync.class.php:47
+#: includes/MediaSync.class.php:49
 msgid "Re-scan"
 msgstr ""
 
-#: includes/MediaSync.class.php:58
+#: includes/MediaSync.class.php:60
+msgid "Sync - uploads directory"
+msgstr ""
+
+#: includes/MediaSync.class.php:63
 msgid "Scan Files"
 msgstr ""
 
-#: includes/MediaSync.class.php:61
-msgid "Import Selected"
-msgstr ""
-
-#: includes/MediaSync.class.php:66
-msgid "Dry Run (test without making database changes)"
+#: includes/MediaSync.class.php:67
+#, php-format
+msgid ""
+"Use this to see content of upload dir: %s and import files to Media Library."
 msgstr ""
 
 #: includes/MediaSync.class.php:72
-#, php-format
-msgid "Click \"Scan Files\" to see content of upload dir: %s"
+msgid "Sync - Media Library"
+msgstr ""
+
+#: includes/MediaSync.class.php:74
+msgid "Filter Media Library"
+msgstr ""
+
+#: includes/MediaSync.class.php:78
+msgid ""
+"Use this to see Media Library items that are missing actual files. This "
+"takes you to Media Library but with custom filter."
 msgstr ""
 
 #: includes/MediaSync.class.php:85
+msgid "Import Selected"
+msgstr ""
+
+#: includes/MediaSync.class.php:90
+msgid "Dry Run (test without making database changes)"
+msgstr ""
+
+#: includes/MediaSync.class.php:103
 msgid "Imported"
 msgstr ""
 
-#: includes/MediaSync.class.php:89
+#: includes/MediaSync.class.php:107
 msgid "out of"
 msgstr ""
 
-#: includes/MediaSync.class.php:93
+#: includes/MediaSync.class.php:111
 msgid "selected items"
 msgstr ""
 
-#: includes/MediaSync.class.php:97
+#: includes/MediaSync.class.php:115
 msgid "Files already in Media Library will be skipped during import"
 msgstr ""
 
-#: includes/MediaSync.class.php:117
+#: includes/MediaSync.class.php:121
+msgid "Filter by type"
+msgstr ""
+
+#: includes/MediaSync.class.php:123
+msgid "All files"
+msgstr ""
+
+#: includes/MediaSync.class.php:125
+msgid "Only files missing from Media Library"
+msgstr ""
+
+#: includes/MediaSync.class.php:130
+msgid "Filter"
+msgstr ""
+
+#: includes/MediaSync.class.php:152
 msgid ""
 "Everything seems fine here, there are no files that are not already in your "
 "Media Library."
 msgstr ""
 
-#: includes/MediaSync.class.php:143
+#: includes/MediaSync.class.php:154
+msgid "No Results"
+msgstr ""
+
+#: includes/MediaSync.class.php:181
 msgid "Select All"
 msgstr ""
 
-#: includes/MediaSync.class.php:147 includes/MediaSync.class.php:197
+#: includes/MediaSync.class.php:185 includes/MediaSync.class.php:235
 msgid "File"
 msgstr ""
 
-#: includes/MediaSync.class.php:226
+#: includes/MediaSync.class.php:264
 msgid "item"
 msgstr ""
 
-#: includes/MediaSync.class.php:226
+#: includes/MediaSync.class.php:264
 msgid "items"
 msgstr ""
 
-#: includes/MediaSync.class.php:230
+#: includes/MediaSync.class.php:268
 msgid "Already in"
 msgstr ""
 
-#: includes/MediaSync.class.php:232
+#: includes/MediaSync.class.php:270
 msgid "In Trash"
+msgstr ""
+
+#: media-sync.php:131 media-sync.php:134
+msgid "Filter by missing file"
+msgstr ""
+
+#: media-sync.php:136
+msgid "With file"
+msgstr ""
+
+#: media-sync.php:138
+msgid "Without file"
 msgstr ""

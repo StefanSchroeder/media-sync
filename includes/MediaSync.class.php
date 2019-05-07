@@ -28,6 +28,8 @@ if ( !class_exists( 'MediaSync' ) ) :
             }
 
             $scan_files = isset($_GET['scan_files']) && $_GET['scan_files'] == true;
+            $associated_filter = isset($_GET['associated-filter']) && !empty($_GET['associated-filter']) ? explode(':', urldecode($_GET['associated-filter'])) : null;
+            $missing_from_ml = $associated_filter && $associated_filter[0] == 'missing_from' && $associated_filter[1] == 'media_library';
 
             $here = esc_url(get_admin_url(null, 'upload.php?page=media-sync-page'));
 
@@ -49,54 +51,86 @@ if ( !class_exists( 'MediaSync' ) ) :
                 <?php endif; ?>
 
                 <div class="media-sync-list-files">
-                    <form action="<?= $here ?>" method="POST">
+                    <form action="<?= $here ?>" method="GET">
                         <input type="hidden" name="page" value="media-sync-page"/>
+                        <input type="hidden" name="scan_files" value="<?= $scan_files ?>"/>
                         <div class="media-sync-buttons-holder">
-                            <p class="media-sync-button-holder">
-                                <?php if (!$scan_files) : ?>
-                                    <a class="button button-primary"
-                                       href="<?= add_query_arg('scan_files', 1, $here) ?>"><?= __('Scan Files', 'media-sync') ?></a>
-                                <?php endif; ?>
-                                <?php if ($scan_files) : ?>
+                            <?php if (!$scan_files) : ?>
+                                <div class="card">
+                                    <h2 class="title"><?= __('Sync - uploads directory', 'media-sync') ?></h2>
+                                    
+                                    <a class="button button-primary" href="<?= add_query_arg('scan_files', 1, $here) ?>">
+                                        <?= __('Scan Files', 'media-sync') ?>
+                                    </a>
+
+                                    <p class="media-sync-scan-files-message">
+                                        <?= sprintf(__('Use this to see content of upload dir: %s and import files to Media Library.', 'media-sync'),
+                                            '<code title="'.$upload_dir['basedir'].'">'.$uploads_dir.'</code>') ?>
+                                    </p>
+                                </div>
+                                <div class="card">
+                                    <h2 class="title"><?= __('Sync - Media Library', 'media-sync') ?></h2>
+                                    <a class="button button-primary" href="<?= add_query_arg('media_sync_missing_files', 'yes', get_admin_url(null, 'upload.php')) ?>">
+                                        <?= __('Filter Media Library', 'media-sync') ?>
+                                    </a>
+
+                                    <p class="media-sync-scan-files-message">
+                                        <?= __('Use this to see Media Library items that are missing actual files. This takes you to Media Library but with custom filter.', 'media-sync') ?>
+                                    </p>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ($scan_files) : ?>
+                                <div class="media-sync-button-holder">
                                     <button class="button button-primary js-import-selected"><?= __('Import Selected', 'media-sync') ?></button>
                                     <span class="spinner import-spinner"></span>
 
                                     <span class="media-sync-dry-run-holder">
-                                    <input type="checkbox" id="dry-run" name="dry_run" checked="checked" />
-                                    <label for="dry-run"><?= __('Dry Run (test without making database changes)', 'media-sync') ?></label>
-                                </span>
-                                <?php endif; ?>
-                            </p>
-                            <?php if (!$scan_files) : ?>
-                                <p class="media-sync-scan-files-message">
-                                    <?= sprintf(__('Click "Scan Files" to see content of upload dir: %s', 'media-sync'),
-                                        '<code title="'.$upload_dir['basedir'].'">'.$uploads_dir.'</code>') ?>
-                                </p>
+                                        <input type="checkbox" id="dry-run" name="dry_run" checked="checked" />
+                                        <label for="dry-run"><?= __('Dry Run (test without making database changes)', 'media-sync') ?></label>
+                                    </span>
+                                </div>
                             <?php endif; ?>
                         </div>
 
                         <?php if ($scan_files) : ?>
                             <p class="media-sync-state-holder">
-                            <span class="media-sync-progress-holder">
-                                <span class="media-sync-progress"></span>
-                            </span>
+                                <span class="media-sync-progress-holder">
+                                    <span class="media-sync-progress"></span>
+                                </span>
                                 <span class="media-sync-state">
-                                <span class="media-sync-state-text">
-                                    <?= __('Imported', 'media-sync') ?>
+                                    <span class="media-sync-state-text">
+                                        <?= __('Imported', 'media-sync') ?>
+                                    </span>
+                                    <span class="media-sync-state-number media-sync-imported-count js-media-sync-imported-count">0</span>
+                                    <span class="media-sync-state-text">
+                                        <?= __('out of', 'media-sync') ?>
+                                    </span>
+                                    <span class="media-sync-state-number media-sync-selected-count js-media-sync-selected-count">0</span>
+                                    <span class="media-sync-state-text">
+                                        <?= __('selected items', 'media-sync') ?>
+                                    </span>
                                 </span>
-                                <span class="media-sync-state-number media-sync-imported-count js-media-sync-imported-count">0</span>
-                                <span class="media-sync-state-text">
-                                    <?= __('out of', 'media-sync') ?>
-                                </span>
-                                <span class="media-sync-state-number media-sync-selected-count js-media-sync-selected-count">0</span>
-                                <span class="media-sync-state-text">
-                                    <?= __('selected items', 'media-sync') ?>
-                                </span>
-                            </span>
                                 <span class="media-sync-state media-sync-state-note">
-                                <?= __('Files already in Media Library will be skipped during import', 'media-sync') ?>
-                            </span>
+                                    <?= __('Files already in Media Library will be skipped during import', 'media-sync') ?>
+                                </span>
                             </p>
+
+                            <div class="wp-filter">
+                                <div class="filter-items">
+                                    <label for="associated-filter" class="screen-reader-text"><?= __('Filter by type', 'media-sync') ?></label>
+                                    <select class="associated-filters" name="associated-filter" id="associated-filter">
+                                        <option value=""><?= __('All files', 'media-sync') ?></option>
+                                        <option value="missing_from:media_library"<?= $missing_from_ml ? 'selected="selected"' : '' ?>>
+                                            <?= __('Only files missing from Media Library', 'media-sync') ?>
+                                        </option>
+                                    </select>
+
+                                    <div class="actions">
+                                        <input type="submit" name="filter_action" id="post-query-submit" class="button" value="<?= __('Filter', 'media-sync') ?>">
+                                    </div>
+                                </div>
+                            </div>
 
                             <?php $tree = self::media_sync_get_list_of_uploads(); ?>
                             <?php if (!empty($tree)) : ?>
@@ -114,7 +148,11 @@ if ( !class_exists( 'MediaSync' ) ) :
                                 </div>
                             <?php else : ?>
                                 <p class="media-sync-no-results">
-                                    <?= __('Everything seems fine here, there are no files that are not already in your Media Library.', 'media-sync') ?>
+                                    <?php if ($missing_from_ml) : ?>
+                                        <?= __('Everything seems fine here, there are no files that are not already in your Media Library.', 'media-sync') ?>
+                                    <?php else : ?>
+                                        <?= __('No Results', 'media-sync') ?>
+                                    <?php endif; ?>
                                 </p>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -138,15 +176,15 @@ if ( !class_exists( 'MediaSync' ) ) :
             $cb_id = 'cb-select-all-' . ($tag == 'thead' ? '1' : '2');
             ?>
             <<?= $tag ?>>
-            <tr>
-                <td class="manage-column check-column check-column-all"<?= $tag == 'thead' ? ' id="cb"':''?>>
-                    <label class="screen-reader-text" for="<?= $cb_id ?>"><?= __('Select All', 'media-sync') ?></label>
-                    <input id="<?= $cb_id ?>" type="checkbox">
-                </td>
-                <th scope="col" class="manage-column column-title column-primary"<?= $tag == 'thead' ? ' id="title"':''?>>
-                    <span><?= __('File', 'media-sync') ?></span>
-                </th>
-            </tr>
+                <tr>
+                    <td class="manage-column check-column check-column-all"<?= $tag == 'thead' ? ' id="cb"':''?>>
+                        <label class="screen-reader-text" for="<?= $cb_id ?>"><?= __('Select All', 'media-sync') ?></label>
+                        <input id="<?= $cb_id ?>" type="checkbox">
+                    </td>
+                    <th scope="col" class="manage-column column-title column-primary"<?= $tag == 'thead' ? ' id="title"':''?>>
+                        <span><?= __('File', 'media-sync') ?></span>
+                    </th>
+                </tr>
             </<?= $tag ?>>
             <?php
         }
@@ -197,16 +235,16 @@ if ( !class_exists( 'MediaSync' ) ) :
                 <td class="title column-title has-row-actions column-primary" data-colname="<?= __('File', 'media-sync') ?>">
                     <?php if (!empty($item['parents'])) : ?>
                         <span class="media-sync-parents">
-                        <?php foreach ($item['parents'] as $parent_key => $parent) : ?>
-                            <?php
-                            $parent_cls = 'media-sync-parent';
-                            $parent_cls .= ' is-first-' . ($parent_key == 0 ? 'yes' : 'no');
-                            $parent_cls .= ' is-last-' . ($parent_key + 1 == count($item['parents']) ? 'yes' : 'no');
-                            ?>
-                            <span class="<?= $parent_cls ?>"><i></i></span>
-                        <?php endforeach; ?>
-                        <span class="clearfix"></span>
-                    </span>
+                            <?php foreach ($item['parents'] as $parent_key => $parent) : ?>
+                                <?php
+                                $parent_cls = 'media-sync-parent';
+                                $parent_cls .= ' is-first-' . ($parent_key == 0 ? 'yes' : 'no');
+                                $parent_cls .= ' is-last-' . ($parent_key + 1 == count($item['parents']) ? 'yes' : 'no');
+                                ?>
+                                <span class="<?= $parent_cls ?>"><i></i></span>
+                            <?php endforeach; ?>
+                            <span class="clearfix"></span>
+                        </span>
                     <?php endif; ?>
 
                     <?php if ($toggle_arrows && $item['is_dir'] === true) : ?>
@@ -217,9 +255,9 @@ if ( !class_exists( 'MediaSync' ) ) :
                     <?php if ($item['is_dir'] === true) : ?>
                         <span class="dashicons dashicons-category"></span>
                     <?php endif; ?>
-                    <span class="media-sync-file-name">
-                    <?= $item['name'] ?>
-                </span>
+                        <span class="media-sync-file-name">
+                            <?= $item['name'] ?>
+                        </span>
                     <?= $is_link ? '</a>' : '' ?>
 
                     <?php if ($item['is_dir'] === true) : ?>
@@ -357,7 +395,9 @@ if ( !class_exists( 'MediaSync' ) ) :
                 return array();
             }
 
-            return self::media_sync_get_list_of_files($upload_dir['basedir'], $upload_dir['basedir'], self::media_sync_get_files_in_db());
+            $associated_filter = isset($_GET['associated-filter']) && !empty($_GET['associated-filter']) ? explode(':', urldecode($_GET['associated-filter'])) : null;
+
+            return self::media_sync_get_list_of_files($upload_dir['basedir'], $upload_dir['basedir'], self::media_sync_get_files_in_db(), $associated_filter);
         }
 
 
@@ -368,9 +408,10 @@ if ( !class_exists( 'MediaSync' ) ) :
          * @param $current_dir_path string  Changing recursively for each directory that gets iterated
          * @param $uploads_dir_path string  Main "uploads" directory
          * @param $files_in_db array        List of files that are already in database
+         * @param $associated_filter string Filter by "association", for now it can only be "file missing from media library" (solved by "Import Selected")
          * @return $tree array
          */
-        static private function media_sync_get_list_of_files($current_dir_path, $uploads_dir_path, $files_in_db)
+        static private function media_sync_get_list_of_files($current_dir_path, $uploads_dir_path, $files_in_db, $associated_filter)
         {
             $obj_rdi = new RecursiveDirectoryIterator($current_dir_path);
             $tree = array();
@@ -386,7 +427,7 @@ if ( !class_exists( 'MediaSync' ) ) :
                     continue;
                 }
 
-                $children = $file->isDir() ? self::media_sync_get_list_of_files($file->getPathname(), $uploads_dir_path, $files_in_db) : array();
+                $children = $file->isDir() ? self::media_sync_get_list_of_files($file->getPathname(), $uploads_dir_path, $files_in_db, $associated_filter) : array();
 
                 if ($file->isDir() && empty($children)) {
                     continue;
@@ -419,11 +460,17 @@ if ( !class_exists( 'MediaSync' ) ) :
                     $relative_path = str_replace(get_home_path(), DIRECTORY_SEPARATOR, $full_path);
                     $file_in_db = isset($files_in_db[$relative_path]) && !empty($files_in_db[$relative_path]) ?
                         $files_in_db[$relative_path] : false;
+                    $file_id = $file_in_db && !empty($file_in_db['id']) ? $file_in_db['id'] : false;
+                    $file_status = $file_in_db && !empty($file_in_db['status']) ? $file_in_db['status'] : false;
+
+                    if ($associated_filter && $associated_filter[0] == 'missing_from' && $associated_filter[1] == 'media_library' && $file_id !== false) {
+                        continue;
+                    }
 
                     $item['relative_path'] = $relative_path;
                     $item['url'] = get_site_url() . $relative_path;
-                    $item['file_id'] = $file_in_db && !empty($file_in_db['id']) ? $file_in_db['id'] : false;
-                    $item['file_status'] = $file_in_db && !empty($file_in_db['status']) ? $file_in_db['status'] : false;
+                    $item['file_id'] = $file_id;
+                    $item['file_status'] = $file_status;
                 }
 
                 // Add with this "key" for sorting

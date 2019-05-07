@@ -4,7 +4,7 @@
  * Plugin Name: Media Sync
  * Plugin URI: https://wordpress.org/plugins/media-sync/
  * Description: Simple plugin to scan uploads directory and bring files to Media Library
- * Version: 0.1.6
+ * Version: 1.0.0
  * Author: Erol Živina
  * Author URI: https://github.com/erolsk8
  * License: GPLv2+
@@ -106,6 +106,100 @@ add_action( 'plugins_loaded', 'media_sync_load_plugin_textdomain' );
  */
 function media_sync_load_plugin_textdomain() {
     load_plugin_textdomain( 'media-sync', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+
+
+
+add_action('restrict_manage_posts', 'media_sync_missing_media_library_filter');
+
+/**
+ * Add filter in Media Library for finding missing files
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function media_sync_missing_media_library_filter()
+{
+    // Skip if it's not Media Library
+    $scr = get_current_screen();
+    if (!is_admin() || $scr->base !== 'upload') return;
+
+    // Get "missing files" filter from URL
+    $missing = filter_input(INPUT_GET, 'media_sync_missing_files', FILTER_SANITIZE_STRING);
+    ?>
+    <label for="filter-by-media-sync-missing-files"
+        class="screen-reader-text"><?= __('Filter by missing file', 'media-sync') ?></label>
+    <select name="media_sync_missing_files" id="filter-by-media-sync-missing-files">
+        <option
+            value=""<?= !$missing ? ' selected="selected"' : '' ?>><?= __('Filter by missing file', 'media-sync') ?></option>
+        <option
+            value="no"<?= $missing === 'no' ? ' selected="selected"' : '' ?>><?= __('With file', 'media-sync') ?></option>
+        <option
+            value="yes"<?= $missing === 'yes' ? ' selected="selected"' : '' ?>><?= __('Without file', 'media-sync') ?></option>
+    </select>
+    <?php
+}
+
+
+
+add_action('pre_get_posts','media_sync_missing_media_library_apply_filter');
+
+/**
+ * Apply filter for Media Library items with or without missing files
+ *
+ * @since 1.0.0
+ * @param $query
+ * @return void
+ */
+function media_sync_missing_media_library_apply_filter($query)
+{
+    // Skip if it's not Media Library
+    $scr = get_current_screen();
+    if (!is_admin() || $scr->base !== 'upload') return;
+
+    // Get "missing files" filter from URL
+    $missing = filter_input(INPUT_GET, 'media_sync_missing_files', FILTER_SANITIZE_STRING);
+
+    // Skip if "missing files" filter is not applied
+    if (!$missing) {
+        return;
+    }
+
+    // Prevent infinite loop
+    remove_action('pre_get_posts', __FUNCTION__);
+
+    // Get all media library items (to be able to check which ones do not have actual files)
+    $media_library_items = get_posts(
+        array_merge(
+            $query->query,
+            array(
+                'fields' => 'ids',
+                'posts_per_page' => -1
+            )
+        )
+    );
+
+    // Get missing files
+    $missing_files = array();
+    foreach ($media_library_items as $id) {
+        // Get absolute path for this file
+        $absolute_path = get_home_path() . str_replace(get_site_url(), "", wp_get_attachment_url($id));
+
+        // If file doesn't actually exists (if it's missing)
+        if (!file_exists($absolute_path)) {
+            $missing_files[] = $id;
+        }
+    }
+
+    // Apply appropriate filter
+    if (!empty($missing_files)) {
+        if ($missing === 'yes') {
+            $query->set('post__in', $missing_files);
+        }
+        if ($missing === 'no') {
+            $query->set('post__not_in', $missing_files);
+        }
+    }
 }
 
 
