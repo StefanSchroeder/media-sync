@@ -89,6 +89,11 @@ if ( !class_exists( 'MediaSync' ) ) :
                                         <input type="checkbox" id="dry-run" name="dry_run" checked="checked" />
                                         <label for="dry-run"><?= __('Dry Run (test without making database changes)', 'media-sync') ?></label>
                                     </span>
+                                    
+                                    <span class="media-sync-dateinname-holder">
+                                        <input type="checkbox" id="dateinname" name="dateinname" checked="checked" />
+                                        <label for="dateinname"><?= __('Use date in name (test without making database changes)', 'media-sync') ?></label>
+                                    </span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -311,6 +316,7 @@ if ( !class_exists( 'MediaSync' ) ) :
 
 
                 $dry_run = isset($_POST['dry_run']) && json_decode($_POST['dry_run']) === true;
+                $date_in_name = isset($_POST['dateinname']) && json_decode($_POST['dateinname']) === true;
 
                 foreach ($_POST['media_items'] as $media_item) {
 
@@ -338,15 +344,17 @@ if ( !class_exists( 'MediaSync' ) ) :
                                 // Get the file date.
                                 $post_date = date( 'Y-m-d H:i:s', filemtime( $absolute_path ) );
                                 
-                                // Does the name contain something that looks like YEAR-MONTH?
-                                if ( preg_match('/(\d\d\d\d)-(\d\d)-/', basename( $absolute_path ), $matches, PREG_OFFSET_CAPTURE) )
-                                {
-                                   $yy = $matches[1][0]; // extract Year
-                                   $mm = $matches[2][0]; // extract Month
+                                if($date_in_name) {
+                                    // Does the name contain something that looks like YEAR-MONTH?
+                                    if ( preg_match('/(\d\d\d\d)-(\d\d)-/', basename( $absolute_path ), $matches, PREG_OFFSET_CAPTURE) )
+                                    {
+                                       $yy = $matches[1][0]; // extract Year
+                                       $mm = $matches[2][0]; // extract Month
 
-                                   // Rewrite date using the new date.
-                                   // Since we are not interested in DAY, HOUR:MINUTE:SECOND, use some defaults.
-                                   $post_date = date("Y-m-d H:i:s", mktime(3, 2, 1, $mm, 1, $yy));
+                                       // Rewrite date using the new date.
+                                       // Since we are not interested in DAY, HOUR:MINUTE:SECOND, use some defaults.
+                                       $post_date = date("Y-m-d H:i:s", mktime(3, 2, 1, $mm, 1, $yy));
+                                    }
                                 }
 
                                 // If for whatever reason not found, use current date.
