@@ -92,7 +92,7 @@ if ( !class_exists( 'MediaSync' ) ) :
                                     
                                     <span class="media-sync-dateinname-holder">
                                         <input type="checkbox" id="dateinname" name="dateinname" checked="checked" />
-                                        <label for="dateinname"><?= __('Use date in name (test without making database changes)', 'media-sync') ?></label>
+                                        <label for="dateinname"><?= __('Use date in name (Looks for YEAR-MONTH- in filename and uses it as post-date)', 'media-sync') ?></label>
                                     </span>
                                 </div>
                             <?php endif; ?>
