@@ -30,6 +30,10 @@
     padding: 12px 0 0;
 }
 
+.main-media-sync-page .media-sync-button-holder .media-sync-dateinname-holder {
+    display: block;
+    padding: 12px 0 0;
+}
 
 .main-media-sync-page .media-sync-scan-files-message {
     display: block;
