@@ -337,6 +337,17 @@ if ( !class_exists( 'MediaSync' ) ) :
 
                                 // Get the file date.
                                 $post_date = date( 'Y-m-d H:i:s', filemtime( $absolute_path ) );
+                                
+                                // Does the name contain something that looks like YEAR-MONTH?
+                                if ( preg_match('/(\d\d\d\d)-(\d\d)-/', basename( $absolute_path ), $matches, PREG_OFFSET_CAPTURE) )
+                                {
+                                   $yy = $matches[1][0]; // extract Year
+                                   $mm = $matches[2][0]; // extract Month
+
+                                   // Rewrite date using the new date.
+                                   // Since we are not interested in DAY, HOUR:MINUTE:SECOND, use some defaults.
+                                   $post_date = date("Y-m-d H:i:s", mktime(3, 2, 1, $mm, 1, $yy));
+                                }
 
                                 // If for whatever reason not found, use current date.
                                 if(!$post_date) {
